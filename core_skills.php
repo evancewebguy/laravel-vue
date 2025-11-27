@@ -1,29 +1,19 @@
 <?php
 
-function createRandArr() {
-    # 1. Create an array of 10 random numbers between 1 and 20;
-    $a = [];
-    for ($x = 0; $x < 10; $x++) {
-        $rand = rand(1,20);
-        $a[] = $rand;
-    }
-
-    return $a;
+// 1. Create an array of 10 random numbers between 1 and 20
+$numbers = [];
+for ($i = 0; $i < 10; $i++) {
+    $numbers[] = rand(1, 20);
 }
 
-# 2.Filter numbers below 10 (using either a loop or array_filter);
-function filterArr() {
-    $a = createRandArr();
+// 2. Filter numbers below 10
+$filtered = array_filter($numbers, function($num) {
+    return $num < 10;
+});
 
-    $arr = [];
+// 3. Output both arrays
+echo "Original array: ";
+print_r($numbers);
 
-    for ($i=0; $i < count($a); $i++) { 
-        if ($a[$i] < 10) {
-            $arr[] = array_filter($a);
-        }
-    }
-    return $arr;
-}
-
-# 3.
-// ...
+echo "\nFiltered array (numbers < 10): ";
+print_r($filtered);
