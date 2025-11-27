@@ -55,7 +55,7 @@ export default {
       moment,
 
       loading: false,
-      // search:'',
+      search:'',
       books: [],
       headers: [
         { title: 'ID', key: 'id' },
