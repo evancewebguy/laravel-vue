@@ -45,6 +45,7 @@
     
     </v-data-table>
 
+    
     <!-- Extend Loan Dialog -->
     <v-dialog v-model="extendDialog" persistent max-width="400px">
       <v-card>
