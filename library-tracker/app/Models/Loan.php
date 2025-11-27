@@ -14,12 +14,17 @@ class Loan extends Model
         'user_id',
         'loaned_at',
         'returned_at',
+        'due_at',
     ];
 
     protected $casts = [
         'loaned_at'   => 'datetime',
         'returned_at' => 'datetime',
+        'due_at'=> 'datetime',
     ];
+
+
+
 
     public function book()
     {

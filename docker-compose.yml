@@ -18,6 +18,25 @@ services:
     networks:
       - library-network
 
+  # Typesense Search Engine
+  typesense:
+    image: typesense/typesense:29.0
+    container_name: typesense-server
+    restart: on-failure
+    ports:
+      - "8108:8108"
+    volumes:
+      - ./library-tracker/typesense-data:/data:cached
+    environment:
+      TYPESENSE_API_KEY: "xyz"
+    command: >
+      --api-key=xyz
+      --data-dir=/data
+      --listen-port=8108
+      --enable-cors
+    networks:
+      - library-network
+
   nginx:
     image: nginx:stable
     container_name: library-nginx

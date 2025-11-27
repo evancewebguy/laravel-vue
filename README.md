@@ -89,3 +89,20 @@ This project is licensed under the **MIT License**.
 ---
 
 🚀 **Happy coding!** 🎉
+
+docker compose down
+
+docker compose up --build -d
+
+docker exec -it library-app bash
+
+cd /code/library-tracker
+
+composer install
+cp .env.example .env
+php artisan key:generate 
+php artisan migrate
+
+php artisan db:seed
+npm install
+npm run dev

@@ -19,6 +19,10 @@
         {{ moment(item.loaned_at).format('MMM Do YYYY \\a\\t h:mm A') }}
       </template>
 
+      <template #item.due_at="{item}">
+        {{ moment(item.due_at).format('MMM Do YYYY \\a\\t h:mm A') }}
+      </template>
+
       <template #item.returned_at="{item}">
         {{ item.returned_at ? moment(item.returned_at).format('MMM Do YYYY \\a\\t h:mm A') : '-' }}
       </template>
@@ -49,6 +53,7 @@ export default {
         { title: 'User', key: 'user.name' },
         { title: 'Book', key: 'book.title' },
         { title: 'Loan Date', key: 'loaned_at' },
+        { title: 'Loan Due', key: 'due_at' },
         { title: 'Return Date', key: 'returned_at' },
       ],
     };

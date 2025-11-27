@@ -58,4 +58,26 @@ class BookAPIController extends Controller
 
         return response()->noContent();
     }
+
+    public function search(Request $request) {
+        $searchQuery = $request->get('q');
+
+        if (!$searchQuery) {
+            // Return all books with author
+            return Book::with('author')->orderBy('id', 'DESC')->get();
+        }
+
+        $searchResults = Book::search($searchQuery)->get();
+
+        // Step 2: Collect IDs from Typesense results
+        $bookIds = $searchResults->pluck('id');
+
+        // Step 3: Fetch full Eloquent models with relationships
+        $books = Book::with('author')->whereIn('id', $bookIds)->get();
+
+        // Step 4: Optional — preserve order returned by Typesense
+        $books = $bookIds->map(fn($id) => $books->firstWhere('id', $id));
+
+        return response()->json($books);
+    }
 }

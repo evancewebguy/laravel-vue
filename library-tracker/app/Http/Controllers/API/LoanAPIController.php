@@ -6,6 +6,8 @@ use Exception;
 use App\Models\Loan;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use Carbon\Carbon;
+
 
 class LoanAPIController extends Controller
 {
@@ -42,6 +44,28 @@ class LoanAPIController extends Controller
         $data = $request->validate([
             'returned_at' => 'nullable|datetime',
         ]);
+
+        $loan->update($data);
+        return $loan;
+    }
+
+    public function putExtend(Request $request, int $id) {
+
+        $loan = Loan::find($id);
+        if (empty($loan)) {
+            throw new Exception('Could not find loan.');
+        }
+
+        $additional_days = $request->additional_days;
+        if ($additional_days > 0 && $additional_days < 14) {
+            $due_at = Carbon::instance($loan['loaned_at'])->addDays($additional_days);
+        }
+
+        $data = $request->validate([
+            'returned_at' => 'nullable|datetime',
+        ]);
+
+        $data['due_at'] = $due_at;
 
         $loan->update($data);
         return $loan;
