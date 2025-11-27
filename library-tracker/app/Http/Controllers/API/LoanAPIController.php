@@ -49,27 +49,36 @@ class LoanAPIController extends Controller
         return $loan;
     }
 
-    public function putExtend(Request $request, int $id) {
-
+    public function putExtend(Request $request, int $id)
+    {
         $loan = Loan::find($id);
-        if (empty($loan)) {
+        if (!$loan) {
             throw new Exception('Could not find loan.');
         }
 
-        $additional_days = $request->additional_days;
-        if ($additional_days > 0 && $additional_days < 14) {
-            $due_at = Carbon::instance($loan['loaned_at'])->addDays($additional_days);
+        // Check if already overdue
+        if (Carbon::parse($loan->due_at)->isPast()) {
+            return response()->json(['message' => 'Loan is already overdue and cannot be extended'], 422);
         }
 
-        $data = $request->validate([
-            'returned_at' => 'nullable|datetime',
+        // Validate additional_days
+        $validated = $request->validate([
+            'additional_days' => 'required|integer|min:1|max:14'
         ]);
 
-        $data['due_at'] = $due_at;
+        $additionalDays = $validated['additional_days'];
 
-        $loan->update($data);
-        return $loan;
+        // NEW due date = current due_at + additional days
+        $newDueAt = Carbon::parse($loan->due_at)->addDays($additionalDays);
+
+        // Update loan
+        $loan->update([
+            'due_at' => $newDueAt
+        ]);
+
+        return response()->json($loan);
     }
+
 
     public function deleteIndex(int $id) {
         $loan = Loan::find($id);
